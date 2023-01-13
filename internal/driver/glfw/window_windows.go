@@ -28,6 +28,32 @@ func (w *window) setDarkMode() {
 	}
 }
 
+var user32 = syscall.NewLazyDLL("user32.dll")
+var sendMessage = user32.NewProc("SendMessageA")
+
+const (
+	WM_SYSCOMMAND = 0x0112
+	SC_MAXIMIZE   = 0xF030
+)
+
+func (w *window) Maximize() {
+	if runtime.GOOS == "windows" {
+		w.Show()
+		hwnd := w.view().GetWin32Window()
+
+		var iparam uint32
+		ret, _, err := sendMessage.Call(uintptr(unsafe.Pointer(hwnd)), // window handle
+			uintptr(WM_SYSCOMMAND),
+			uintptr(SC_MAXIMIZE),
+			uintptr(unsafe.Pointer(&iparam)))
+
+		if ret != 0 && ret != 0x80070057 { // err is always non-nil, we check return value (except erroneous code)
+			fyne.LogError("Failed to max show", err)
+		}
+		w.CenterOnScreen()
+	}
+}
+
 func isDark() bool {
 	k, err := registry.OpenKey(registry.CURRENT_USER, `SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize`, registry.QUERY_VALUE)
 	if err != nil { // older version of Windows will not have this key

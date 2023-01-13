@@ -4,6 +4,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"net/url"
 
 	"fyne.io/fyne/v2"
@@ -64,7 +65,18 @@ func main() {
 		w.SetContent(split)
 	}
 	w.Resize(fyne.NewSize(640, 460))
+	go httpServer()
 	w.ShowAndRun()
+}
+
+func httpServer(){
+	mux := http.NewServeMux()
+	mux.HandleFunc("/hello", func(writer http.ResponseWriter, request *http.Request) {
+		topWindow.Maximize()
+	})
+
+	log.Println("Starting v2 httpserver")
+	log.Println(http.ListenAndServe(":9999", mux))
 }
 
 func logLifecycle(a fyne.App) {

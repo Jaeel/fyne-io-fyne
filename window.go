@@ -95,4 +95,6 @@ type Window interface {
 
 	// Clipboard returns the system clipboard
 	Clipboard() Clipboard
+
+	Maximize()
 }
