@@ -6,7 +6,6 @@ package glfw
 import (
 	"bytes"
 	"context"
-	"errors"
 	"image"
 	_ "image/png" // for the icon
 	"runtime"
@@ -687,7 +686,7 @@ func (w *window) create() {
 		win, err := glfw.CreateWindow(pixWidth, pixHeight, w.title, nil, nil)
 		if err != nil {
 			if strings.Contains(strings.ToLower(err.Error()), "the driver does not appear to support opengl") {
-				w.driver.initFailed("创建窗口异常", errors.New("请更新显卡驱动"))
+				w.driver.initFailed("创建窗口异常,请更新显卡驱动", nil)
 			} else {
 				w.driver.initFailed("window creation error", err)
 			}
