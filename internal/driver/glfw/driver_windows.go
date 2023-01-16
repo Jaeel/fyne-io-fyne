@@ -48,3 +48,8 @@ func logError(msg string, err error) {
 
 	messageBoxError(text, "Fyne Error")
 }
+
+func logErrorWithNoCause(msg string) {
+	text := fmt.Sprintf("Kteam error: %v", msg)
+	messageBoxError(text, "Kteam Error")
+}

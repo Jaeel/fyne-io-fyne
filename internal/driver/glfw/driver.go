@@ -159,6 +159,19 @@ func (d *gLDriver) initFailed(msg string, err error) {
 	}
 }
 
+func (d *gLDriver) initFailed2(msg string) {
+	logErrorWithNoCause(msg)
+
+	run.Lock()
+	if !run.flag {
+		run.Unlock()
+		d.Quit()
+	} else {
+		run.Unlock()
+		os.Exit(1)
+	}
+}
+
 func (d *gLDriver) Run() {
 	if goroutineID() != mainGoroutineID {
 		panic("Run() or ShowAndRun() must be called from main goroutine")

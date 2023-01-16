@@ -686,7 +686,7 @@ func (w *window) create() {
 		win, err := glfw.CreateWindow(pixWidth, pixHeight, w.title, nil, nil)
 		if err != nil {
 			if strings.Contains(strings.ToLower(err.Error()), "the driver does not appear to support opengl") {
-				w.driver.initFailed("创建窗口异常,请更新显卡驱动", nil)
+				w.driver.initFailed2("创建窗口异常,请更新显卡驱动")
 			} else {
 				w.driver.initFailed("window creation error", err)
 			}
